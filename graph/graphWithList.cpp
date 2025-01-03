@@ -27,43 +27,6 @@ void printList(Node *ptr){
     }
     cout<<endl;
 }
-
-void BFS(int src){
-    int par[V],dist[V];
-    char color[V];
-    for(int i=0;i<V;i++){
-        color[i] = 'W';
-        par[i] = -1;
-        dist[i] = 0;
-    }
-    queue<int> Q;
-    color[src] = 'G';
-    Q.push(src);
-
-    while(!Q.empty()){
-        int cur_node = Q.front();
-        Q.pop();
-        if(color[cur_node]=='B')
-            continue;
-        /// Neighbor
-        Node *ptr = g[cur_node];
-
-        while(ptr){
-            int neighbor = ptr->vtx;
-            if(color[neighbor]=='W'){
-                dist[neighbor] = dist[cur_node] + ptr->w;
-                par[neighbor] = cur_node;
-                color[neighbor] = 'G';
-                Q.push(neighbor);
-            }
-            ptr = ptr->next;
-        }
-        color[cur_node] = 'B';
-        cout<<cur_node<<"->";
-    }
-
-}
-
 int main(){
     int a,b,c;
     cin>>V>>E;
@@ -78,7 +41,6 @@ int main(){
         cout<<i<<": ";
         printList(g[i]);
     }
-    BFS(0);
     return 0;
 }
 /*
