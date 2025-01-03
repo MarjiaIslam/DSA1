@@ -2,35 +2,47 @@
 using namespace std;
 
 struct Node{
-    char item;
+    int item,prio;
     Node *next;
 };
-Node *F = NULL, *R = NULL;
+Node *F = NULL;
 
 bool isEmpty(){
     return F==NULL;
 }
 
-void enqueue(char ch){
+void enqueue(int it,int p){
     Node *newNode = new Node;
-    newNode->item = ch;
+    newNode->item = it;
+    newNode->prio = p;
     newNode->next = NULL;
 
     if(F==NULL){
         F = newNode;
-        R = newNode;
         return;
     }
-
-    R->next = newNode;
-    R = newNode;
+    ///
+    if(F->prio < newNode->prio){
+        newNode->next = F;
+        F = newNode;
+    }
+    else{
+        Node *ptr = F;
+        while(ptr->next!=NULL){
+            if(ptr->next->prio < newNode->prio)
+                break;
+            ptr = ptr->next;
+        }
+        newNode->next = ptr->next;
+        ptr->next = newNode;
+    }
 }
-char dequeue(){
+int dequeue(){
     if(isEmpty()){
         cout<<"UNDERFLOW"<<endl;
         return '\0';
     }
-    char item = F->item;
+    int item = F->item;
     Node *tmp = F;
     F = F->next;
     delete tmp;
@@ -44,15 +56,17 @@ void display(){
     cout<<"Q: ";
     Node *ptr = F;
     while(ptr){
-        cout<<ptr->item<<"->";
+        cout<<"("<<ptr->item<<","<<ptr->prio<<")->";
         ptr = ptr->next;
     }
     cout<<endl;
 }
 int main(){
 
-    enqueue('a');
-    enqueue('c');
+    enqueue(2,1);
+    enqueue(5,3);
+    enqueue(1,4);
+    enqueue(10,2);
     display();
     cout<<dequeue()<<" is deleted.."<<endl;
     display();
